@@ -23,7 +23,9 @@ steps:
     repository: 'hamimp/web_app'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
-    tags: '$(Build.BuildNumber)'
+    tags: |
+      '$(Build.BuildNumber)'
+      latest
 
 - task: KubernetesManifest@1
   inputs:
