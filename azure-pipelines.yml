@@ -29,7 +29,7 @@ steps:
   inputs:
     action: 'deploy'
     connectionType: 'azureResourceManager'
-    azureSubscriptionConnection: 'hamim-aks-network-rg'
+    azureSubscriptionConnection: 'hamim-aks'
     azureResourceGroup: 'hamim-aks-network-rg'
     kubernetesCluster: 'hamim-aks-cluster'
     manifests: 'application-manifest.yaml'
