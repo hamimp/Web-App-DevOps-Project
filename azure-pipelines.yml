@@ -24,7 +24,7 @@ steps:
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
     tags: |
-      '$(Build.BuildNumber)'
+      $(Build.BuildNumber)
       latest
 
 - task: KubernetesManifest@1
