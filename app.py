@@ -5,15 +5,33 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 import pyodbc
 import os
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+from azure.core.exceptions import ResourceNotFoundError
 
 # Initialise Flask App
 app = Flask(__name__)
 
-# database connection 
-server = 'devops-project-server.database.windows.net'
-database = 'orders-db'
-username = 'maya'
-password = 'AiCore1237'
+# Create managed identity credentials
+credential = DefaultAzureCredential()
+
+# Create a SecretClient using managed identity credentials
+key_vault_url = "https://hamim-key-vault.vault.azure.net/"
+secret_client = SecretClient(vault_url=key_vault_url, credential=credential)
+
+# Retrieve database connection details from Azure Key Vault
+
+server = secret_client.get_secret("server-name").value
+
+try:
+    server = secret_client.get_secret("server-name").value
+    database = secret_client.get_secret("database-name").value
+    username = secret_client.get_secret("server-username").value
+    password = secret_client.get_secret("server-password").value
+    print('Secrete retrieved')
+except ResourceNotFoundError:
+    raise Exception("Database connection details not found in Azure Key Vault")
+
 driver= '{ODBC Driver 18 for SQL Server}'
 
 # Create the connection string
